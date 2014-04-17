@@ -9,3 +9,4 @@ Version: @@pconfigure_version@@
 Libs: -Wl,-rpath,${libdir} -L${libdir} -ldrasm
 Cflags: -I${includedir} 
 URL: http://github.com/palmer-dabbelt/libdrasm/
+Requires: libocn
