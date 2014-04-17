@@ -37,17 +37,17 @@ namespace libdrasm {
     public:
         /* Returns the number of registers that a machine has. */
         size_t register_width(void) const { return 32; }
-        size_t register_count(void) const { return 1024; }
+        size_t register_count(void) const { return 65536; }
 
         /* Returns the machine's code memory size: width in bits and
          * depth in words. */
         size_t code_mem_width(void) const { return 32; }
-        size_t code_mem_depth(void) const { return 1024; }
+        size_t code_mem_depth(void) const { return 65536; }
 
         /* Returns the machine's data memory size: width in bits and
          * depth in words. */
         size_t data_mem_width(void) const { return 32; }
-        size_t data_mem_depth(void) const { return 1024; }
+        size_t data_mem_depth(void) const { return 65536; }
     };
 
     template<class node_t>
