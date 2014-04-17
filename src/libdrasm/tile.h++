@@ -25,6 +25,7 @@
 #include "machine.h++"
 #include "memword.h++"
 #include "instruction.h++"
+#include "regval.h++"
 #include "transmission.h++"
 #include <vector>
 
@@ -41,6 +42,7 @@ namespace libdrasm {
         std::vector<instruction> _instructions;
         std::vector<transmission> _transmissions;
         std::vector<memword> _data;
+        std::vector<regval> _regs;
 
     public:
         /* Creates a new Tile, given a machine configuration. */
@@ -54,11 +56,17 @@ namespace libdrasm {
          * placed at, or -1 if there's no memory space left. */
         ssize_t find_free_word(void) const;
 
+        /* Returns the first register that's free to be used. */
+        ssize_t find_free_register(void) const;
+
         /* Takes up an instruction slot. */
         void use_instruction(ssize_t i);
 
         /* Takes up a memory word. */
         void use_word(ssize_t i);
+
+        /* Takes up a memory word. */
+        void use_register(ssize_t i);
     };
 }
 

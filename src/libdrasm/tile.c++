@@ -26,7 +26,8 @@ tile::tile(const std::shared_ptr<machine>& machine)
     : _machine(machine),
       _instructions(machine->code_mem_depth(), instruction()),
       _transmissions(machine->code_mem_depth(), transmission()),
-      _data(machine->data_mem_depth(), memword())
+      _data(machine->data_mem_depth(), memword()),
+      _regs(machine->register_count(), regval())
 {
 }
 
@@ -48,6 +49,15 @@ ssize_t tile::find_free_word(void) const
     return -1;
 }
 
+ssize_t tile::find_free_register(void) const
+{
+    for (size_t i = 0; i < _regs.size(); ++i)
+        if (_regs[i].busy() == false)
+            return i;
+
+    return -1;
+}
+
 void tile::use_instruction(ssize_t i)
 {
     _instructions[i].update(i);
@@ -56,4 +66,9 @@ void tile::use_instruction(ssize_t i)
 void tile::use_word(ssize_t i)
 {
     _data[i].update(i);
+}
+
+void tile::use_register(ssize_t i)
+{
+    _regs[i].update(i);
 }

@@ -36,7 +36,8 @@ namespace libdrasm {
     class machine {
     public:
         /* Returns the number of registers that a machine has. */
-        size_t register_count(void) const { return 32; }
+        size_t register_width(void) const { return 32; }
+        size_t register_count(void) const { return 1024; }
 
         /* Returns the machine's code memory size: width in bits and
          * depth in words. */
