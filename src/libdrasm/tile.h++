@@ -48,13 +48,19 @@ namespace libdrasm {
         /* Creates a new Tile, given a machine configuration. */
         tile(const std::shared_ptr<machine>& machine);
 
+        /* This allows for access to arbitrary machine configuration
+         * parameters. */
+        std::shared_ptr<machine> m(void) const { return _machine.lock(); }
+
         /* Returns the first cycle that an instruction can be placed
          * at, or -1 if this tile is full. */
-        ssize_t find_free_instruction(void) const;
+        ssize_t find_free_instruction(size_t start = 0) const;
 
-        /* Returns the first memory location that a single word can be
-         * placed at, or -1 if there's no memory space left. */
-        ssize_t find_free_word(void) const;
+        /* Returns the first memory location that a single word (or an
+         * array) can be placed at, or -1 if there's no memory space
+         * left. */
+        ssize_t find_free_word(void) const { return find_free_array(1); }
+        ssize_t find_free_array(size_t size) const;
 
         /* Returns the first register that's free to be used. */
         ssize_t find_free_register(void) const;
@@ -62,8 +68,9 @@ namespace libdrasm {
         /* Takes up an instruction slot. */
         void use_instruction(ssize_t i);
 
-        /* Takes up a memory word. */
-        void use_word(ssize_t i);
+        /* Takes up a memory word or an array */
+        void use_word(size_t offset) { return use_array(offset, 1); }
+        void use_array(size_t offset, size_t size);
 
         /* Takes up a memory word. */
         void use_register(ssize_t i);

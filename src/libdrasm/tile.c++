@@ -31,20 +31,29 @@ tile::tile(const std::shared_ptr<machine>& machine)
 {
 }
 
-ssize_t tile::find_free_instruction(void) const
+ssize_t tile::find_free_instruction(size_t start) const
 {
-    for (size_t i = 0; i < _instructions.size(); ++i)
+    for (size_t i = start; i < _instructions.size(); ++i)
         if (_instructions[i].busy() == false)
             return i;
 
     return -1;
 }
 
-ssize_t tile::find_free_word(void) const
+ssize_t tile::find_free_array(size_t size) const
 {
-    for (size_t i = 0; i < _data.size(); ++i)
-        if (_data[i].busy() == false)
+    for (size_t i = 0; i < _data.size(); ++i) {
+        if (i + size >= _data.size())
+            return -1;
+
+        bool any_busy = false;
+        for (size_t j = 0; j < size; ++j)
+            if (_data[i+j].busy() == true)
+                any_busy = true;
+
+        if (any_busy == false)
             return i;
+    }
 
     return -1;
 }
@@ -63,9 +72,10 @@ void tile::use_instruction(ssize_t i)
     _instructions[i].update(i);
 }
 
-void tile::use_word(ssize_t i)
+void tile::use_array(size_t offset, size_t size)
 {
-    _data[i].update(i);
+    for (size_t i = offset; i < (offset + size); ++i)
+        _data[i].update(i);
 }
 
 void tile::use_register(ssize_t i)
