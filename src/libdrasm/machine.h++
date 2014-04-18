@@ -48,6 +48,25 @@ namespace libdrasm {
          * depth in words. */
         size_t data_mem_width(void) const { return 32; }
         size_t data_mem_depth(void) const { return 65536; }
+
+        /* The delay between issuing an ALU operation and producing
+         * its results -- this will be 0 if the ALU bypasses. */
+        size_t alu_delay(void) const { return 0; }
+
+        /* The delay between reading a packet in from the network
+         * input port and having that value in a register -- this will
+         * be 0 if there's bypassing. */
+        size_t net_to_reg_delay(void) const { return 0; }
+
+        /* The delay between reading a register and writing it out to
+         * the network -- this will be 0 if there's bypassing. */
+        size_t reg_to_net_delay(void) const { return 0; }
+
+        /* The delay between reading a packet from the network and
+         * writing that packet to the network.  This will be the
+         * number of pipeline stages between the two halves of the
+         * network.  */
+        size_t net_to_set_delay(void) const { return 2; }
     };
 
     template<class node_t>
