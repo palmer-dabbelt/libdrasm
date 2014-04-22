@@ -45,6 +45,16 @@ namespace libdrasm {
                 _cycle = cycle;
                 _busy = true;
             }
+
+        size_t cycle(void) const
+            {
+                if (_busy == false) {
+                    fprintf(stderr, "Accessed cycle of invalid instruction\n");
+                    abort();
+                }
+
+                return _cycle;
+            }
     };
 }
 

@@ -34,15 +34,14 @@ namespace libdrasm {
         /* This is a weak pointer */
         std::weak_ptr<machine> _machine;
 
-        /* The code memory is split up into two parts: "instructions"
-         * (things that touch the ALU) and "transmissions" (things
-         * that touch the network).  Both operations can be performed
-         * somewhat independently in a single cycle, which is why
-         * they're split like this. */
-        std::vector<instruction> _instructions;
-        std::vector<transmission> _transmissions;
+        /* The storage elements associated with a tile. */
         std::vector<memword> _data;
         std::vector<regval> _regs;
+
+        /* This stores a mapping from a cycle to the instruction that
+         * will be executed at that cycle. */
+        std::map<size_t, std::shared_ptr<instruction>> _instructions;
+        ssize_t _last_inst_cycle;
 
     public:
         /* Creates a new Tile, given a machine configuration. */
@@ -54,7 +53,7 @@ namespace libdrasm {
 
         /* Returns the first cycle that an instruction can be placed
          * at, or -1 if this tile is full. */
-        ssize_t find_free_instruction(size_t start = 0) const;
+        ssize_t find_free_instruction(ssize_t start = 0) const;
 
         /* Returns the first memory location that a single word (or an
          * array) can be placed at, or -1 if there's no memory space
@@ -74,6 +73,10 @@ namespace libdrasm {
 
         /* Takes up a memory word. */
         void use_register(ssize_t i);
+
+        /* Returns the cycle at which the last used instruction will
+         * execute. */
+        ssize_t last_used_instruction(void) const;
     };
 }
 
