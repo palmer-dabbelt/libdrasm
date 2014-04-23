@@ -22,6 +22,10 @@
 #ifndef LIBDRASM__ATCYCLE_HXX
 #define LIBDRASM__ATCYCLE_HXX
 
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 namespace libdrasm {
     /* Here's a class that deals with somethat that may or may not
      * happen at a particular cycle. */
