@@ -76,10 +76,10 @@ namespace libdrasm {
         typedef std::shared_ptr<node_t> node_ptr;
 
     public:
-        machine_t(size_t w, size_t h,
-                  std::function<node_ptr(size_t, size_t)> f)
+        machine_t(const std::string net_fn,
+                  std::function<node_ptr(std::string)> f)
             : machine(),
-              _network(std::make_shared<libocn::mesh_network<node_t>>(w, h, f))
+              _network(std::make_shared<libocn::network<node_t>>(net_fn, f))
             {
             }
 
