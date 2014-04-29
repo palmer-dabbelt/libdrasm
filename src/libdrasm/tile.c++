@@ -76,7 +76,8 @@ void tile::use_instruction(ssize_t i)
 {
     const auto l = _instructions.find(i);
     if (l != _instructions.end()) {
-        fprintf(stderr, "Attempted to re-use an instruction %ld!\n", i);
+        fprintf(stderr, "Attempted to re-use an instruction %ld!\n",
+                (long)i);
         abort();
     }
 
