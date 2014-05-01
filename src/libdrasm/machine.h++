@@ -44,6 +44,11 @@ namespace libdrasm {
         size_t code_mem_width(void) const { return 32; }
         size_t code_mem_depth(void) const { return 65536; }
 
+        /* Returns the machine's route memory size: width in bits and
+         * depth in words. */
+        size_t route_mem_width(void) const { return 32; }
+        size_t route_mem_depth(void) const { return 65536; }
+
         /* Returns the machine's data memory size: width in bits and
          * depth in words. */
         size_t data_mem_width(void) const { return 32; }

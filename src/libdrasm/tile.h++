@@ -43,6 +43,11 @@ namespace libdrasm {
         std::map<size_t, std::shared_ptr<instruction>> _instructions;
         ssize_t _last_inst_cycle;
 
+        /* This stores a mapping from a cycle to the transmission that
+         * will be executed at that cycle. */
+        std::map<size_t, std::shared_ptr<instruction>> _transmissions;
+        ssize_t _last_trans_cycle;
+
     public:
         /* Creates a new Tile, given a machine configuration. */
         tile(const std::shared_ptr<machine>& machine);
@@ -54,6 +59,12 @@ namespace libdrasm {
         /* Returns the first cycle that an instruction can be placed
          * at, or -1 if this tile is full. */
         ssize_t find_free_instruction(ssize_t start = 0) const;
+        void use_instruction(ssize_t i);
+
+        /* Returns the first cycle that a transmission can be placed
+         * at, or -1 if the tile is full. */
+        ssize_t find_free_transmission(ssize_t start = 0) const;
+        void use_transmission(ssize_t i);
 
         /* Returns the first memory location that a single word (or an
          * array) can be placed at, or -1 if there's no memory space
@@ -63,9 +74,6 @@ namespace libdrasm {
 
         /* Returns the first register that's free to be used. */
         ssize_t find_free_register(void) const;
-
-        /* Takes up an instruction slot. */
-        void use_instruction(ssize_t i);
 
         /* Takes up a memory word or an array */
         void use_word(size_t offset) { return use_array(offset, 1); }

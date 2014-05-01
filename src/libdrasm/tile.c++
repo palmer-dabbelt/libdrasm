@@ -27,7 +27,9 @@ tile::tile(const std::shared_ptr<machine>& machine)
       _data(machine->data_mem_depth(), memword()),
       _regs(machine->register_count(), regval()),
       _instructions(),
-      _last_inst_cycle(0)
+      _last_inst_cycle(0),
+      _transmissions(),
+      _last_trans_cycle(0)
 {
 }
 
@@ -43,6 +45,56 @@ ssize_t tile::find_free_instruction(ssize_t start) const
     if (start > _last_inst_cycle)
         return start;
     return _last_inst_cycle + 1;
+}
+
+void tile::use_instruction(ssize_t i)
+{
+    const auto l = _instructions.find(i);
+    if (l != _instructions.end()) {
+        fprintf(stderr, "Attempted to re-use an instruction %ld!\n",
+                (long)i);
+        abort();
+    }
+
+    if (i <= _last_inst_cycle) {
+        fprintf(stderr, "Attempted to use an instruction too early\n");
+        abort();
+    }
+
+    _instructions[i] = NULL;
+    _last_inst_cycle = i;
+}
+
+ssize_t tile::find_free_transmission(ssize_t start) const
+{
+    /* If there's no space left on this tile then we can't allocate an
+     * transmissions. */
+    if (_transmissions.size() >= _machine.lock()->route_mem_depth())
+        return -1;
+
+    /* Otherwise we can allocate an instruction, so pass back the
+     * cycle. */
+    if (start > _last_trans_cycle)
+        return start;
+    return _last_trans_cycle + 1;
+}
+
+void tile::use_transmission(ssize_t i)
+{
+    const auto l = _transmissions.find(i);
+    if (l != _transmissions.end()) {
+        fprintf(stderr, "Attempted to re-use an transmission %ld!\n",
+                (long)i);
+        abort();
+    }
+
+    if (i <= _last_trans_cycle) {
+        fprintf(stderr, "Attempted to use an transmission too early\n");
+        abort();
+    }
+
+    _transmissions[i] = NULL;
+    _last_trans_cycle = i;
 }
 
 ssize_t tile::find_free_array(size_t size) const
@@ -70,24 +122,6 @@ ssize_t tile::find_free_register(void) const
             return i;
 
     return -1;
-}
-
-void tile::use_instruction(ssize_t i)
-{
-    const auto l = _instructions.find(i);
-    if (l != _instructions.end()) {
-        fprintf(stderr, "Attempted to re-use an instruction %ld!\n",
-                (long)i);
-        abort();
-    }
-
-    if (i <= _last_inst_cycle) {
-        fprintf(stderr, "Attempted to use an instruction too early\n");
-        abort();
-    }
-
-    _instructions[i] = NULL;
-    _last_inst_cycle = i;
 }
 
 void tile::use_array(size_t offset, size_t size)
