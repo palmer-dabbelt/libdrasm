@@ -15,12 +15,5 @@ COMPILEOPTS += -Sobj/proc/version-pc.sed
 GENERATE    += version.h
 GENERATE    += version-pc.sed
 
-LIBRARIES   += libdrasm.so
-COMPILEOPTS += `ppkg-config libocn --cflags`
-LINKOPTS    += `ppkg-config libocn --libs`
-SOURCES     += libdrasm/machine.c++
-SOURCES     += libdrasm/tile.c++
-CONFIG      += find_library_headers
-
 LIBRARIES   += pkgconfig/libdrasm.pc
 SOURCES     += libdrasm/libdrasm.pc
