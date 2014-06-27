@@ -17,3 +17,6 @@ GENERATE    += version-pc.sed
 
 LIBRARIES   += pkgconfig/libdrasm.pc
 SOURCES     += libdrasm/libdrasm.pc
+
+BINARIES    += dreamer-objdump
+SOURCES     += objdump.c++

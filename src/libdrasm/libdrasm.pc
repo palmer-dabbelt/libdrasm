@@ -1,0 +1,11 @@
+prefix=@@pconfigure_prefix@@
+exec_prefix=@@pconfigure_prefix@@
+libdir=${prefix}/@@pconfigure_libdir@@
+includedir=${prefix}/@@pconfigure_hdrdir@@
+
+Name: libdrasm
+Description: A DREAMER assembly-level library
+Version: @@pconfigure_version@@
+Libs: -Wl,-rpath,${libdir} -L${libdir} -ldrasm
+Cflags: -I${includedir} 
+URL: http://github.com/palmer-dabbelt/libdrasm/
